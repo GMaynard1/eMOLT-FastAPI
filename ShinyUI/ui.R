@@ -1,0 +1,21 @@
+library(rjson)
+shinyServer(function(input, output) {
+  output$contact_json=eventReactive(
+    input$submit,
+    {contact=list(
+      first_name=input$first_name,
+      last_name=input$last_name,
+      no_contact=ifelse(input$no_contact==TRUE,0,1),
+      contact_role=input$role,
+      phone=input$phone,
+      email=input$email,
+      street_1=input$address1,
+      street_2=input$address2,
+      city=input$city,
+      state=input$state,
+      zip_code=input$zip
+    )
+      print(toJSON(contact))
+    }
+  )
+})
