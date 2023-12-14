@@ -1,0 +1,30 @@
+library(rjson)
+library(httr)
+library(jsonlite)
+shinyServer(function(input, output) {
+  output$contact_json=eventReactive(
+    input$submit,
+    {contact=list(
+      first_name=input$first_name,
+      last_name=input$last_name,
+      no_contact=ifelse(input$no_contact==TRUE,'0','1'),
+      contact_role=input$role,
+      phone=input$phone,
+      email=input$email,
+      street_1=input$address1,
+      street_2=input$address2,
+      city=input$city,
+      state=input$state,
+      zip_code=input$zip
+    )
+      contact_json=toJSON(contact)
+      response=rawToChar(
+        POST(
+          url="http://127.0.0.1:8000/api/v1/users",
+          body=contact_json
+        )$content
+      )
+      print(response)
+    }
+  )
+})
